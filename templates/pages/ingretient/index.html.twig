@@ -1,0 +1,68 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}SymRecipe - Mes ingretients{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+        {% if not ingretients.items is same as([]) %}
+        <h1>Mes Ingretients</h1>
+            <a href="{{ path('ingretient.new') }}" class="btn btn-primary">
+                Ajouter
+            </a>
+            {% for message in app.flashes('success') %}
+                <div class="alert alert-success mt-4">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        <div class="count mt-4">
+            <h4>
+                Il y a
+                {{ ingretients.getTotalItemCount }}
+                ingretients au total
+            </h4>
+        </div>
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Nom</th>
+                <th scope="col">Prix</th>
+                <th scope="col">Date de création</th>
+                <th scope="col">Edition</th>
+                <th scope="col">Suppression</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for ingretient in ingretients %}
+                <tr class="table-primary">
+                    <th scope="row">{{ ingretient.id }}</th>
+                    <td>{{ ingretient.name }}</td>
+                    <td>{{ ingretient.price }}</td>
+                    <td>{{ ingretient.createdAt | date("m/d/Y") }}</td>
+                    <td>
+                        <a href="{{ path('ingredient.edit', {id: ingretient.id}) }}">
+                            <button class="btn btn-info">
+                                Edition
+                            </button>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="{{ path('ingredient.delete', {id: ingretient.id}) }}">
+                            <button class="btn btn-danger">
+                                Suppression
+                            </button>
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <div class="navigation d-flex justify-content-center">
+            {{ knp_pagination_render(ingretients) }}
+        </div>
+        {% else %}
+            <h4>Il n'y a pas d'ingretients</h4>
+        {% endif %}
+    </div>
+
+{% endblock %}
